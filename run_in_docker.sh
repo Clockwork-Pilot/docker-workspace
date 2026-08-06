@@ -5,7 +5,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 CMD=(bash -c "source ~/.bashrc; $*")
 
-PROJECT_ROOT="$PWD"
+DOCKER_FLAGS=${DOCKER_FLAGS:-}
 DOCKER_HOME="$SCRIPT_DIR/docker-home"
 SSH_PUBKEY=${SSH_PUBKEY:-"$HOME/.ssh/id_ed25519.pub"}
 
@@ -23,4 +23,5 @@ docker run -i $TTY_FLAG --rm \
     -v "$DOCKER_HOME":/home/node/:Z \
     -v "$PWD":/workspace:Z \
     ${SSH_AUTH_SOCK:+-v "$SSH_AUTH_SOCK":/ssh-agent -e SSH_AUTH_SOCK=/ssh-agent} \
+    $DOCKER_FLAGS \
     cww "${CMD[@]}"

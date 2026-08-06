@@ -26,7 +26,7 @@ if [ "$USER_UID" != "$HOST_UID" ] || [ "$USER_GID" != "$HOST_GID" ]; then
     chown -R "$HOST_UID:$HOST_GID" /home/node
 fi
 
-chown -R "$HOST_UID:$HOST_GID" "$WORKSPACE_ROOT"
+chown -R "$HOST_UID:$HOST_GID" "$WORKSPACE_ROOT" >/dev/null 2>&1 || true
 
 if [ "$#" -eq 0 ]; then
     exec gosu "$HOST_UID:$HOST_GID" /bin/bash
