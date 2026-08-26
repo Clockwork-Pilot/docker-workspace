@@ -40,9 +40,9 @@ git_deny_config=$(cat <<'EOF'
           "am", "apply", "archive", "bisect",
           "bundle", "checkout", "cherry-pick", "clean",
           "config", "describe", "fetch", "filter-branch", "filter-repo",
-          "fsck", "gc", "grep", "init", "merge", "mv", "notes",
+          "fsck", "gc", "grep", "init", "merge", "notes",
           "prune", "pull", "push", "rebase", "reflog", "remote", "repack",
-          "replace", "reset", "restore", "revert", "rm", "shortlog",
+          "replace", "reset", "restore", "shortlog",
           "stash", "switch", "symbolic-ref", "tag",
           "update-ref"
         ],
