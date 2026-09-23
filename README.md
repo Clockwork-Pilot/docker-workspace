@@ -74,7 +74,17 @@ Note: chmod is restricted in /workspace to avoid resetting read-only attributes 
 
 # Enable commits signing inside of docker
 Optionally you want be able enable commits signing in docker container
+**Run on host machine** following commands:
 
+## Load identities
+``` bash
+# Ensure identities loaded on host
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+ssh-add -l
+```
+
+## Prepare script
 ``` bash
 # Prepare script for docker
 script=$(cat <<'EOF'
@@ -86,21 +96,22 @@ ssh-add -l
 echo "test" | ssh-keygen -Y sign     -f ~/.ssh/id_ed25519     -n file
 
 # Set git repo settings
-git config user.name  "$GIT_AUTHOR_NAME"
-git config user.email "$GIT_AUTHOR_EMAIL"
-git config --list
+/usr/bin/git config user.name  "$GIT_AUTHOR_NAME"
+/usr/bin/git config user.email "$GIT_AUTHOR_EMAIL"
+/usr/bin/git config --list
 
 # Set global git settings
-git config --global user.name  "$GIT_AUTHOR_NAME"
-git config --global user.email "$GIT_AUTHOR_EMAIL"
-git config --global user.signingkey ~/.ssh/id_ed25519.pub
-git config --global gpg.format ssh
-git config --global commit.gpgsign true
-git config --global --list
+/usr/bin/git config --global user.name  "$GIT_AUTHOR_NAME"
+/usr/bin/git config --global user.email "$GIT_AUTHOR_EMAIL"
+/usr/bin/git config --global user.signingkey ~/.ssh/id_ed25519.pub
+/usr/bin/git config --global gpg.format ssh
+/usr/bin/git config --global commit.gpgsign true
+/usr/bin/git config --global --list
 EOF
 )
 ```
 
+# Run script
 ``` bash
 # Run script in docker
 run_in_docker.sh "
