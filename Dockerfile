@@ -27,7 +27,23 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       sudo \
       unzip \
       wget \
+      xz-utils \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Node.js v24 (official tarball; NodeSource/apt has no bookworm v24 line)
+ARG NODE_VERSION=24.9.0
+RUN set -eux; \
+    case "$(dpkg --print-architecture)" in \
+      amd64) NODE_ARCH=x64 ;; \
+      arm64) NODE_ARCH=arm64 ;; \
+      armhf) NODE_ARCH=armv7l ;; \
+      *) echo "unsupported arch" >&2; exit 1 ;; \
+    esac; \
+    curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${NODE_ARCH}.tar.xz" -o /tmp/node.tar.xz; \
+    tar -xJf /tmp/node.tar.xz -C /usr/local --strip-components=1 --no-same-owner \
+        --exclude=CHANGELOG.md --exclude=LICENSE --exclude=README.md; \
+    rm /tmp/node.tar.xz; \
+    node --version; npm --version
 
 ARG USERNAME=node
 ARG HOME=/home/$USERNAME
@@ -46,7 +62,6 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 WORKDIR /workspace
 ENV WORKSPACE_ROOT=/workspace
-ENV PROJECT_ROOT=/workspace
 ENV PATH="$HOME/.local/bin:$PATH"
 
 USER root
