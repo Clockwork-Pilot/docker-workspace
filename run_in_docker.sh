@@ -3,10 +3,10 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-CMD=(bash -c "source ~/.bashrc; $*")
+CMD=(bash -c "source ~/.bashrc 2>/dev/null || true; $*")
 
 DOCKER_FLAGS=${DOCKER_FLAGS:-}
-DOCKER_HOME="$SCRIPT_DIR/docker-home"
+DOCKER_HOME=${DOCKER_HOME:-"$SCRIPT_DIR/docker-home"}
 SSH_PUBKEY=${SSH_PUBKEY:-"$HOME/.ssh/id_ed25519.pub"}
 
 # `-t` requires a TTY on stdin/stdout; skip it when invoked from a
